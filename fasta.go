@@ -7,9 +7,10 @@ import (
 )
 
 type sequence struct {
-	id          string
-	description string
-	seq         string
+	id            string
+	description   string
+	seq           string
+	alignmentName string
 }
 
 func check(e error) {
@@ -18,8 +19,8 @@ func check(e error) {
 	}
 }
 
-func ReadFasta(path string) []sequence {
-	dat, err := ioutil.ReadFile(path)
+func ReadFasta(fp, alnID string) []sequence {
+	dat, err := ioutil.ReadFile(fp)
 	check(err)
 
 	var (
@@ -52,9 +53,10 @@ func ReadFasta(path string) []sequence {
 	for i := range seqs {
 		sequences = append(sequences,
 			sequence{
-				id:          ids[i],
-				description: descriptions[i],
-				seq:         seqs[i],
+				id:            ids[i],
+				description:   descriptions[i],
+				seq:           seqs[i],
+				alignmentName: alnID,
 			},
 		)
 	}
