@@ -1,21 +1,21 @@
 package main
 
 import (
-	"strings"
 	"bytes"
 	"io/ioutil"
+	"strings"
 )
 
 type sequence struct {
-	id string
+	id          string
 	description string
-	seq string
-} 
+	seq         string
+}
 
 func check(e error) {
-    if e != nil {
-        panic(e)
-    }
+	if e != nil {
+		panic(e)
+	}
 }
 
 func ReadFasta(path string) []sequence {
@@ -23,16 +23,15 @@ func ReadFasta(path string) []sequence {
 	check(err)
 
 	var (
-		ids []string
+		ids          []string
 		descriptions []string
-		seqs []string
+		seqs         []string
 	)
 
 	var b bytes.Buffer
-	for _, line := range bytes.Split(dat, '\n') {
-		strLine := string(line)
+	for _, strLine := range strings.Split(string(dat), "\n") {
 		if strings.HasPrefix(strLine, ">") {
-			splittedStrLine := strings.SplitN(strLine[1:len(strLine) - 1], " ", 2)
+			splittedStrLine := strings.SplitN(strLine[1:len(strLine)-1], " ", 2)
 			if len(splittedStrLine) > 1 {
 				descriptions = append(descriptions, splittedStrLine[1])
 			} else {
@@ -45,19 +44,19 @@ func ReadFasta(path string) []sequence {
 				b.Reset()
 			}
 		} else {
-			b.Write(line)
+			b.WriteString(strLine)
 		}
 	}
 
 	var sequences []sequence
 	for i := range seqs {
-		sequences = append(sequences, 
+		sequences = append(sequences,
 			sequence{
-				id: ids[i],
+				id:          ids[i],
 				description: descriptions[i],
-				seq: seqs[i]
-			}
+				seq:         seqs[i],
+			},
 		)
 	}
-	return []sequence
+	return sequences
 }
